@@ -1,19 +1,22 @@
 public class Jantar
 {
-	private boolean[] garfos = new boolean[10];
-	
-	public Jantar()
+	private boolean[] garfos;
+	private int nFilosofos;
+
+	public Jantar(int nFilosofos)
 	{
-		for (int i = 0; i < 10; i++) //Todos os garfos são inicializados disponíveis;
+		this.nFilosofos = nFilosofos;
+		garfos = new boolean[nFilosofos];
+		for (int i = 0; i < nFilosofos; i++) //Todos os garfos são inicializados disponíveis;
 			garfos[i] = true; 
 	}
 
-	private void mudaEstadoIndisponivel(int garfo)
+	private synchronized void mudaEstadoIndisponivel(int garfo)
 	{
 		garfos[garfo] = false;
 	}
 
-	private void mudaEstadoDisponivel(int garfo)
+	private synchronized void mudaEstadoDisponivel(int garfo)
 	{
 		garfos[garfo] = true;
 	}
@@ -52,17 +55,17 @@ public class Jantar
 		notifyAll();
 	}
 
-	private int filosofo_ant(int filosofo) //Retorna o filósofo anterior ao que está executando;
+	private int filosofo_ant(int filosofo) //Retorna o filósofo anterior ao que está executando, lembrando que o 0 e último estão lado a lado;
 	{
 		if (filosofo == 0)
-			return 9;
+			return nFilosofos - 1;
 		else
 			return filosofo - 1;		
 	}
 
-	private int filosofo_prox(int filosofo) //Retorna o filósofo sucessor ao que está executando;
+	private int filosofo_prox(int filosofo) //Retorna o filósofo sucessor ao que está executando, lembrando que o 0 e último estão lado a lado;
 	{
-		if (filosofo == 9)
+		if (filosofo == nFilosofos - 1)
 			return 0;
 		else
 			return filosofo + 1;		

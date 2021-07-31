@@ -3,22 +3,25 @@
 public class Filosofos extends Thread
 {
 	Jantar janta; //Objeto pertencente a classe jantar para que todos os filósofos estejam participando da mesma circunstância;
-	private int[] situacao = new int[10]; //Vetor com a quantidade de filósofos armazenando ints que indicam se o filósofo ainda não comeu (0) ou se já o fez (1);
+	private int[] situacao; //Vetor com a quantidade de filósofos armazenando ints que indicam se o filósofo ainda não comeu (0) ou se já o fez (1);
 	private final static int tempo = 5000; //variável fixa de 5 segundos para utilizar nos sleep;
-	private static int i; //int i dos comandos for, declarado aqui pois foi usado mais de uma vez;
-	int id; //identificador do filósofo;
+	private static int i, nFilosofos; //int i dos comandos for, declarado aqui pois foi usado mais de uma vez e a variável que recebe o número total de filósofos;
+	private int id; //identificador do filósofo;
 
-	public Filosofos(int id, Jantar janta)
+	public Filosofos(int id, Jantar janta, int nFilosofos)
 	{
 		this.id = id;
 		this.janta = janta;
+		if(id == 0)
+		this.nFilosofos = nFilosofos;
+		situacao = new int[nFilosofos];
 	}
 
 	public void run()
 	{
 		while(true)
 		{
-			pensar(id);
+			pensar(id);	
 			tentaGarfos(id);
 			comer(id);
 		}
@@ -27,7 +30,7 @@ public class Filosofos extends Thread
 	private void pensar(int filosofo)
 	{
 		try
-		{
+		{	
 			sleep(tempo);
 			System.out.println("O Filósofo " + filosofo + " Está Pensando");
 		}
@@ -62,7 +65,7 @@ public class Filosofos extends Thread
 
 	protected void situacaoInicial() // Nenhum filósofo comeu, 0 atribuído a todas as posições do vetor de situação;
 	{
-		for (i = 0; i < 10; i++)
+		for (i = 0; i < nFilosofos; i++)
 			situacao[i] = 0;
 	}
 
@@ -80,7 +83,7 @@ public class Filosofos extends Thread
 
 	private boolean verificaSituacao() //Se todos os filósofos comeram, chama o método situaçãoInicial para zerar todas as posições;
 	{
-		for (i = 0; i < 10; i++) {
+		for (i = 0; i < nFilosofos; i++) {
 			if (situacao[i] == 1)
 				continue;
 			else
